@@ -29,7 +29,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+    <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-3 sm:px-8 sm:py-4">
       <Link href="/" className="flex items-center gap-2.5 font-display text-xl font-bold tracking-tight">
         <span aria-hidden className="grid grid-cols-2 gap-[3px]">
           <i className="size-2.5 rounded-[3px] bg-puzzle" />

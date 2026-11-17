@@ -39,4 +39,6 @@ The shell handles score, best score, restart, pause, full screen and the end scr
 
 ## Status
 
-Playable: 2048. The other 19 are listed as "Coming soon".
+Playable (10): 2048, Sudoku, Minesweeper, Memory Match, Word Guess, Sliding Puzzle, Tic-Tac-Toe, Connect Four, Hangman, Rock Paper Scissors.
+
+Coming soon (10): the arcade and reflex games.

@@ -5,11 +5,12 @@ import { ArrowLeft, CircleHelp, Heart, Maximize, Minimize, Pause, Play, RotateCc
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GAME_COMPONENTS } from "@/games/loaders";
 import { getGame } from "@/games/registry";
+import type { GameResult } from "@/games/types";
 import { sfx } from "@/lib/sound";
 import { useArcade } from "@/lib/store";
 import { Confetti } from "./Confetti";
 
-type EndState = { score: number; won?: boolean; newBest: boolean };
+type EndState = GameResult & { newBest: boolean };
 
 const control =
   "glass inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors hover:bg-surface-strong";
@@ -54,7 +55,7 @@ export function GameShell({ slug }: { slug: string }) {
   );
 
   const handleEnd = useCallback(
-    (result: { score: number; won?: boolean }) => {
+    (result: GameResult) => {
       const state = useArcade.getState();
       const before = bestAtStart.current ?? state.best[slug] ?? 0;
       state.submitScore(slug, result.score);
@@ -97,23 +98,23 @@ export function GameShell({ slug }: { slug: string }) {
         </button>
       </div>
 
-      <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
-        <h1 className="font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl">{game.name}</h1>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <h1 className="font-display text-3xl font-extrabold tracking-[-0.03em] sm:text-5xl">{game.name}</h1>
         <dl className="flex gap-2">
-          <div className="glass min-w-24 rounded-2xl px-4 py-2 text-center">
+          <div className="glass min-w-20 rounded-2xl px-3 py-1.5 text-center sm:min-w-24 sm:px-4 sm:py-2">
             <dt className="text-xs font-medium text-muted">Score</dt>
-            <dd className="font-display text-2xl font-bold tabular-nums">{score.toLocaleString("en")}</dd>
+            <dd className="font-display text-xl font-bold tabular-nums sm:text-2xl">{score.toLocaleString("en")}</dd>
           </div>
-          <div className="glass min-w-24 rounded-2xl px-4 py-2 text-center">
+          <div className="glass min-w-20 rounded-2xl px-3 py-1.5 text-center sm:min-w-24 sm:px-4 sm:py-2">
             <dt className="text-xs font-medium text-muted">Best</dt>
-            <dd className="font-display text-2xl font-bold tabular-nums text-(--cat)">
+            <dd className="font-display text-xl font-bold tabular-nums sm:text-2xl text-(--cat)">
               {Math.max(best, score).toLocaleString("en")}
             </dd>
           </div>
         </dl>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
         <button type="button" onClick={restart} className={control}>
           <RotateCcw className="size-4" aria-hidden />
           New game
@@ -148,7 +149,7 @@ export function GameShell({ slug }: { slug: string }) {
 
       <div
         ref={stage}
-        className="relative mt-5 flex flex-1 flex-col items-center justify-start [&:fullscreen]:justify-center [&:fullscreen]:bg-bg [&:fullscreen]:p-6"
+        className="relative mt-4 flex flex-1 flex-col items-center justify-start [&:fullscreen]:justify-center [&:fullscreen]:bg-bg [&:fullscreen]:p-6"
       >
         <Game key={run} paused={paused || end !== null} onScore={handleScore} onEnd={handleEnd} />
 
@@ -172,6 +173,7 @@ export function GameShell({ slug }: { slug: string }) {
               </h2>
               <p className="mt-3 text-lg text-muted">
                 You scored <strong className="text-ink">{end.score.toLocaleString("en")}</strong>.
+                {end.message && <span className="mt-1 block">{end.message}</span>}
                 {end.newBest && <span className="mt-1 block font-semibold text-(--cat)">That is your new best score.</span>}
               </p>
               <button

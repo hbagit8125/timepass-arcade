@@ -111,6 +111,16 @@ body {
   100% { scale: 1; opacity: 1; }
 }
 
+@keyframes disc-drop {
+  0% { transform: translateY(calc(var(--rows) * -112%)); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes shake {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
