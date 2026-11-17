@@ -23,7 +23,7 @@ export default async function GamePage(props: PageProps<"/games/[slug]">) {
   if (!game.playable) {
     return (
       <div data-cat={game.category} className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-5 py-16 text-center">
-        <div className="grid size-20 place-items-center rounded-3xl border border-dashed border-(--cat) text-(--cat)">
+        <div className="grid size-20 place-items-center rounded-3xl border border-dashed border-(--cat) text-(--cat-ink)">
           <GameIcon name={game.icon} className="size-9" />
         </div>
         <h1 className="mt-6 font-display text-4xl font-bold tracking-tight">{game.name} is coming soon</h1>

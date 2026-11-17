@@ -131,7 +131,7 @@ export default function TicTacToe({ paused, onScore, onEnd }: GameProps) {
                 ? mark === "X"
                   ? "bg-(--cat) text-on-accent"
                   : "bg-arcade text-on-accent"
-                : `bg-surface-strong ${mark === "X" ? "text-(--cat)" : "text-arcade"} ${
+                : `bg-surface-strong ${mark === "X" ? "text-(--cat-ink)" : "text-arcade"} ${
                     !mark && turn === "you" ? "hover:bg-[color-mix(in_oklab,var(--cat)_22%,var(--surface-strong))]" : ""
                   }`
             }`}

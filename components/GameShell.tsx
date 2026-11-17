@@ -122,7 +122,7 @@ export function GameShell({ slug }: { slug: string }) {
           </div>
           <div className="glass min-w-20 rounded-2xl px-3 py-1.5 text-center sm:min-w-24 sm:px-4 sm:py-2">
             <dt className="text-xs font-medium text-muted">Best</dt>
-            <dd className="font-display text-xl font-bold tabular-nums sm:text-2xl text-(--cat)">
+            <dd className="font-display text-xl font-bold tabular-nums sm:text-2xl text-(--cat-ink)">
               {Math.max(best, score).toLocaleString("en")}
             </dd>
           </div>
@@ -165,7 +165,7 @@ export function GameShell({ slug }: { slug: string }) {
 
       <div
         ref={stage}
-        className="relative mt-4 flex flex-1 flex-col items-center justify-start [&:fullscreen]:justify-center [&:fullscreen]:bg-bg [&:fullscreen]:p-6"
+        className="relative mt-4 flex min-h-[min(34rem,calc(100dvh-13rem))] flex-1 flex-col items-center justify-start [&:fullscreen]:justify-center [&:fullscreen]:bg-bg [&:fullscreen]:p-6"
       >
         <Game key={run} paused={paused || end !== null} onScore={handleScore} onEnd={handleEnd} />
 
@@ -190,7 +190,7 @@ export function GameShell({ slug }: { slug: string }) {
               <p className="mt-3 text-lg text-muted">
                 You scored <strong className="text-ink">{end.score.toLocaleString("en")}</strong>.
                 {end.message && <span className="mt-1 block">{end.message}</span>}
-                {end.newBest && <span className="mt-1 block font-semibold text-(--cat)">That is your new best score.</span>}
+                {end.newBest && <span className="mt-1 block font-semibold text-(--cat-ink)">That is your new best score.</span>}
               </p>
               <button
                 type="button"

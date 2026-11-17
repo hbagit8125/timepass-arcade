@@ -94,7 +94,7 @@ export default function Hangman({ paused, onScore, onEnd }: GameProps) {
       <div className="glass flex w-full max-w-lg flex-col items-center rounded-3xl px-4 py-5 shadow-lift">
         <div className="flex w-full items-center justify-between text-sm text-muted">
           <span>
-            Clue: <strong className="font-semibold text-(--cat)">{hint}</strong>
+            Clue: <strong className="font-semibold text-(--cat-ink)">{hint}</strong>
           </span>
           <span>
             Wrong guesses {wrong} of {MAX_WRONG}
@@ -113,12 +113,12 @@ export default function Hangman({ paused, onScore, onEnd }: GameProps) {
           aria-label={`Hangman drawing, ${wrong} of ${MAX_WRONG} parts`}
         >
           <path d="M30 180h110M60 180V20h80v26" className="text-muted" stroke="currentColor" />
-          <g className={lost ? "text-arcade" : "text-(--cat)"} stroke="currentColor">
+          <g className={lost ? "text-arcade" : "text-(--cat-ink)"} stroke="currentColor">
             {PARTS.slice(0, wrong)}
           </g>
         </svg>
 
-        <div className="mt-3 flex flex-wrap justify-center gap-1.5" aria-label="The word">
+        <div className="mt-3 flex flex-wrap justify-center gap-1.5" role="group" aria-label="The word">
           {[...word].map((letter, i) => {
             const shown = tried.includes(letter);
             return (

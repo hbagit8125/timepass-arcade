@@ -37,6 +37,18 @@ lib/                      saved-score store, sound effects, canvas and game-loop
 
 The shell handles score, best score, restart, pause, full screen and the end screen.
 
+## Offline and install
+
+`public/sw.js` is a small service worker. Pages are fetched fresh when online and served from the saved copy when not; hashed files under `/_next/static/` are served from the saved copy first. After the first visit, `components/OfflineReady.tsx` downloads every game in the background, so the whole arcade works without a connection. Browsers that support it show an "Install app" button in the header.
+
+The service worker only registers in production builds. If you change caching behaviour in a way that needs old copies thrown away, bump `CACHE` in `public/sw.js`.
+
 ## Status
 
-All 20 games are playable.
+All 20 games are playable. Phases 1 to 4 are complete.
+
+Checks at the end of Phase 4, on a production build:
+
+- Lighthouse (mobile): performance 92 on the home page and 97 to 99 on game pages; accessibility, best practices and SEO 100.
+- axe accessibility scan: no issues on the home page or any of the 20 game pages, in both themes.
+- Offline: every game page loads and plays with the network switched off, after one online visit.

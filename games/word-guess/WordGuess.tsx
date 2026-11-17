@@ -129,6 +129,7 @@ export default function WordGuess({ paused, onScore, onEnd }: GameProps) {
               {Array.from({ length: LENGTH }, (_, i) => (
                 <div
                   key={i}
+                  role="img"
                   aria-label={letters[i] ? `${letters[i]}${marks ? `, ${MARK_LABEL[marks[i]]}` : ""}` : "empty"}
                   className={`grid aspect-square place-items-center rounded-xl border-2 font-display text-3xl font-extrabold uppercase transition-colors duration-300 ${
                     marks ? MARK_CLASS[marks[i]] : letters[i] ? "border-(--cat)" : "border-line"

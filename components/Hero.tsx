@@ -85,9 +85,9 @@ export function Hero() {
           >
             <GameIcon name={game.icon} className="size-14" />
           </div>
-          <div className="min-h-20 px-4 text-center">
+          <div className="h-20 px-4 text-center">
             <div className="font-display text-2xl font-bold tracking-tight">{game.name}</div>
-            <div className="mx-auto mt-1 max-w-52 text-sm leading-snug text-muted">{game.playable ? game.tagline : "Coming soon"}</div>
+            <div className="mx-auto mt-1 line-clamp-2 max-w-52 text-sm leading-snug text-muted">{game.playable ? game.tagline : "Coming soon"}</div>
           </div>
           <span className="absolute -left-3 -top-3 size-6 rounded-lg bg-classic" />
           <span className="absolute -bottom-4 right-10 size-8 rounded-xl bg-reflex" />

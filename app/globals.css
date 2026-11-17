@@ -18,6 +18,11 @@
   --arcade: #ff4f9a;
   --classic: #2fe3c8;
   --reflex: #9d8cff;
+  /* Text versions of the category colours; darker in the light theme so they stay readable. */
+  --puzzle-ink: #ffb52e;
+  --arcade-ink: #ff6aa9;
+  --classic-ink: #2fe3c8;
+  --reflex-ink: #b0a2ff;
   --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.7);
 }
 
@@ -36,6 +41,10 @@
   --arcade: #f0347f;
   --classic: #12bfa5;
   --reflex: #7a66f5;
+  --puzzle-ink: #8f5d00;
+  --arcade-ink: #c2185f;
+  --classic-ink: #08705f;
+  --reflex-ink: #5540cf;
   --shadow: 0 18px 44px -22px rgba(60, 40, 140, 0.35);
 }
 
@@ -51,8 +60,8 @@
   --color-arcade: var(--arcade);
   --color-classic: var(--classic);
   --color-reflex: var(--reflex);
-  --font-sans: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque Variable", "Outfit Variable", sans-serif;
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-outfit), sans-serif;
   --shadow-lift: var(--shadow);
 }
 
@@ -84,10 +93,10 @@ body {
 }
 
 /* Each category sets --cat once; children pick it up. */
-[data-cat="puzzle"] { --cat: var(--puzzle); }
-[data-cat="arcade"] { --cat: var(--arcade); }
-[data-cat="classic"] { --cat: var(--classic); }
-[data-cat="reflex"] { --cat: var(--reflex); }
+[data-cat="puzzle"] { --cat: var(--puzzle); --cat-ink: var(--puzzle-ink); }
+[data-cat="arcade"] { --cat: var(--arcade); --cat-ink: var(--arcade-ink); }
+[data-cat="classic"] { --cat: var(--classic); --cat-ink: var(--classic-ink); }
+[data-cat="reflex"] { --cat: var(--reflex); --cat-ink: var(--reflex-ink); }
 
 /* Game card tilt: --rx / --ry are set from pointer position. */
 .tilt {
@@ -120,6 +129,23 @@ body {
   20%, 60% { transform: translateX(-6px); }
   40%, 80% { transform: translateX(6px); }
 }
+
+/* Card previews: parts animate only while the card is hovered or focused. */
+.pv * { transform-box: fill-box; transform-origin: center; }
+.pv .pv-bob { animation: pv-bob 0.7s ease-in-out infinite alternate; }
+.pv .pv-jump { animation: pv-jump 0.9s ease-in-out infinite; }
+.pv .pv-slide { animation: pv-slide 0.8s ease-in-out infinite alternate; }
+.pv .pv-blink { animation: pv-blink 0.9s steps(2, jump-none) infinite; }
+.pv .pv-pop { animation: pv-pop 0.9s ease-in-out infinite; }
+.pv [class^="pv-"] { animation-play-state: paused; }
+article:hover .pv [class^="pv-"],
+article:focus-within .pv [class^="pv-"] { animation-play-state: running; }
+
+@keyframes pv-bob { to { transform: translateY(9px); } }
+@keyframes pv-jump { 40% { transform: translateY(-22px) translateX(14px); } 80%, 100% { transform: translateX(0); } }
+@keyframes pv-slide { to { transform: translateX(19px); } }
+@keyframes pv-blink { to { opacity: 0.25; } }
+@keyframes pv-pop { 50% { transform: scale(1.18); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

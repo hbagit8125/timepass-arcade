@@ -4,29 +4,37 @@ import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
 import type { GameProps } from "./types";
 
-// Each game is its own bundle, downloaded only when someone opens it.
-export const GAME_COMPONENTS: Record<string, ComponentType<GameProps>> = {
-  "2048": dynamic(() => import("./2048/Game2048"), { ssr: false }),
-  sudoku: dynamic(() => import("./sudoku/Sudoku"), { ssr: false }),
-  minesweeper: dynamic(() => import("./minesweeper/Minesweeper"), { ssr: false }),
-  "memory-match": dynamic(() => import("./memory-match/MemoryMatch"), { ssr: false }),
-  "word-guess": dynamic(() => import("./word-guess/WordGuess"), { ssr: false }),
-  "sliding-puzzle": dynamic(() => import("./sliding-puzzle/SlidingPuzzle"), { ssr: false }),
-  "tic-tac-toe": dynamic(() => import("./tic-tac-toe/TicTacToe"), { ssr: false }),
-  "connect-four": dynamic(() => import("./connect-four/ConnectFour"), { ssr: false }),
-  hangman: dynamic(() => import("./hangman/Hangman"), { ssr: false }),
-  "rock-paper-scissors": dynamic(() => import("./rock-paper-scissors/RockPaperScissors"), { ssr: false }),
+type Loader = () => Promise<{ default: ComponentType<GameProps> }>;
+
+// One import per game. The game page and the offline download both go
+// through these, so they fetch exactly the same files.
+const LOADERS: Record<string, Loader> = {
+  "2048": () => import("./2048/Game2048"),
+  sudoku: () => import("./sudoku/Sudoku"),
+  minesweeper: () => import("./minesweeper/Minesweeper"),
+  "memory-match": () => import("./memory-match/MemoryMatch"),
+  "word-guess": () => import("./word-guess/WordGuess"),
+  "sliding-puzzle": () => import("./sliding-puzzle/SlidingPuzzle"),
+  "tic-tac-toe": () => import("./tic-tac-toe/TicTacToe"),
+  "connect-four": () => import("./connect-four/ConnectFour"),
+  hangman: () => import("./hangman/Hangman"),
+  "rock-paper-scissors": () => import("./rock-paper-scissors/RockPaperScissors"),
+  snake: () => import("./snake/Snake"),
+  "brick-breaker": () => import("./brick-breaker/BrickBreaker"),
+  "falling-blocks": () => import("./falling-blocks/FallingBlocks"),
+  flap: () => import("./flap/Flap"),
+  "paddle-duel": () => import("./paddle-duel/PaddleDuel"),
+  dash: () => import("./dash/Dash"),
+  "whack-a-mole": () => import("./whack-a-mole/WhackAMole"),
+  echo: () => import("./echo/Echo"),
+  "reaction-time": () => import("./reaction-time/ReactionTime"),
+  "typing-speed": () => import("./typing-speed/TypingSpeed"),
 };
 
-Object.assign(GAME_COMPONENTS, {
-  snake: dynamic(() => import("./snake/Snake"), { ssr: false }),
-  "brick-breaker": dynamic(() => import("./brick-breaker/BrickBreaker"), { ssr: false }),
-  "falling-blocks": dynamic(() => import("./falling-blocks/FallingBlocks"), { ssr: false }),
-  flap: dynamic(() => import("./flap/Flap"), { ssr: false }),
-  "paddle-duel": dynamic(() => import("./paddle-duel/PaddleDuel"), { ssr: false }),
-  dash: dynamic(() => import("./dash/Dash"), { ssr: false }),
-  "whack-a-mole": dynamic(() => import("./whack-a-mole/WhackAMole"), { ssr: false }),
-  echo: dynamic(() => import("./echo/Echo"), { ssr: false }),
-  "reaction-time": dynamic(() => import("./reaction-time/ReactionTime"), { ssr: false }),
-  "typing-speed": dynamic(() => import("./typing-speed/TypingSpeed"), { ssr: false }),
-});
+// Each game is its own bundle, downloaded only when someone opens it.
+export const GAME_COMPONENTS: Record<string, ComponentType<GameProps>> = Object.fromEntries(
+  Object.entries(LOADERS).map(([slug, load]) => [slug, dynamic(load, { ssr: false })]),
+);
+
+/** Downloads every game's code ahead of time, so it is available offline. */
+export const preloadAllGames = () => Promise.allSettled(Object.values(LOADERS).map((load) => load()));

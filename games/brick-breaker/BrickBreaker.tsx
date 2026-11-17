@@ -158,7 +158,7 @@ export default function BrickBreaker({ paused, onScore, onEnd }: GameProps) {
       ctx.fill();
     }
     ctx.fillStyle = c.muted;
-    ctx.font = '600 14px "Outfit Variable", sans-serif';
+    ctx.font = `600 14px ${getComputedStyle(document.body).getPropertyValue("--font-outfit") || "sans-serif"}`;
     ctx.textAlign = "right";
     ctx.textBaseline = "middle";
     ctx.fillText(`Level ${g.level}`, W - SIDE, 28);

@@ -88,7 +88,7 @@ export function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w
 
 export function centerText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, size: number, color: string) {
   ctx.fillStyle = color;
-  ctx.font = `700 ${size}px "Bricolage Grotesque Variable", "Outfit Variable", sans-serif`;
+  ctx.font = `700 ${size}px ${getComputedStyle(document.body).getPropertyValue("--font-bricolage") || "sans-serif"}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(text, x, y);

@@ -75,7 +75,7 @@ export default function TypingSpeed({ paused, onScore, onEnd }: GameProps) {
                 {[...w].map((letter, k) => (
                   <span
                     key={k}
-                    className={k >= typed.length ? "" : typed[k] === letter ? "text-(--cat)" : "text-arcade underline"}
+                    className={k >= typed.length ? "" : typed[k] === letter ? "text-(--cat-ink)" : "text-arcade underline"}
                   >
                     {letter}
                   </span>

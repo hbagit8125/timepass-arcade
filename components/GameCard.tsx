@@ -7,6 +7,7 @@ import type { GameMeta } from "@/games/registry";
 import { CATEGORIES } from "@/games/registry";
 import { useArcade } from "@/lib/store";
 import { GameIcon } from "./GameIcon";
+import { GamePreview } from "./GamePreview";
 
 function tilt(e: PointerEvent<HTMLElement>) {
   if (e.pointerType !== "mouse") return;
@@ -32,16 +33,20 @@ export function GameCard({ game }: { game: GameMeta }) {
   const body = (
     <>
       <div
-        className={`grid size-13 place-items-center rounded-2xl ${
-          game.playable ? "bg-(--cat) text-on-accent" : "border border-dashed border-(--cat) text-(--cat)"
+        className={`grid h-24 place-items-center rounded-2xl ${
+          game.playable ? "bg-[color-mix(in_oklab,var(--cat)_13%,transparent)]" : "border border-dashed border-(--cat)"
         }`}
       >
-        <GameIcon name={game.icon} className="size-6" />
+        {game.playable ? (
+          <GamePreview slug={game.slug} className="h-[4.5rem]" />
+        ) : (
+          <GameIcon name={game.icon} className="size-6 text-(--cat-ink)" />
+        )}
       </div>
       <h3 className="mt-4 font-display text-xl font-bold tracking-tight">{game.name}</h3>
       <p className="mt-1 text-sm leading-snug text-muted">{game.tagline}</p>
       <div className="mt-auto flex items-center justify-between pt-5 text-sm">
-        <span className="font-medium text-(--cat)">{categoryLabel}</span>
+        <span className="font-medium text-(--cat-ink)">{categoryLabel}</span>
         <span className="text-muted">
           {!game.playable ? "Coming soon" : best ? `Best ${best.toLocaleString("en")}` : "Not played yet"}
         </span>
@@ -53,7 +58,7 @@ export function GameCard({ game }: { game: GameMeta }) {
     return (
       <article
         data-cat={game.category}
-        className="flex min-h-52 flex-col rounded-3xl border border-dashed border-line p-5 opacity-70"
+        className="flex min-h-60 flex-col rounded-3xl border border-dashed border-line p-5 opacity-70"
       >
         {body}
       </article>
@@ -65,7 +70,7 @@ export function GameCard({ game }: { game: GameMeta }) {
       data-cat={game.category}
       onPointerMove={tilt}
       onPointerLeave={untilt}
-      className="tilt glass relative flex min-h-52 flex-col rounded-3xl p-5 shadow-lift hover:border-(--cat)"
+      className="tilt glass relative flex min-h-60 flex-col rounded-3xl p-5 shadow-lift hover:border-(--cat)"
     >
       <Link href={`/games/${game.slug}`} className="absolute inset-0 rounded-3xl" aria-label={`Play ${game.name}`} />
       {body}
@@ -74,7 +79,7 @@ export function GameCard({ game }: { game: GameMeta }) {
         onClick={() => toggleFavourite(game.slug)}
         aria-pressed={isFavourite}
         aria-label={isFavourite ? `Remove ${game.name} from favourites` : `Add ${game.name} to favourites`}
-        className="absolute right-3 top-3 z-10 grid size-10 place-items-center rounded-full text-muted transition-colors hover:bg-surface-strong hover:text-arcade"
+        className="absolute right-6 top-6 z-10 grid size-10 place-items-center rounded-full text-muted transition-colors hover:bg-surface-strong hover:text-arcade"
       >
         <Heart className={`size-5 ${isFavourite ? "fill-arcade text-arcade" : ""}`} />
       </button>

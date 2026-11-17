@@ -164,7 +164,7 @@ export default function Minesweeper({ paused, onScore, onEnd }: GameProps) {
                 cell.near || ""
               )
             ) : cell.flag ? (
-              <Flag className="size-[50%] fill-(--cat) text-(--cat)" aria-hidden />
+              <Flag className="size-[50%] fill-(--cat) text-(--cat-ink)" aria-hidden />
             ) : null}
           </button>
         ))}

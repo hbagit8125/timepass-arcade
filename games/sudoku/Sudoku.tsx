@@ -97,7 +97,7 @@ export default function Sudoku({ paused, onEnd }: GameProps) {
                           ? "bg-[color-mix(in_oklab,var(--cat)_14%,var(--surface-strong))]"
                           : "bg-surface-strong"
                   } ${given ? "font-extrabold" : "font-semibold"} ${
-                    wrong && !isSelected ? "text-arcade" : !given && !isSelected ? "text-(--cat)" : ""
+                    wrong && !isSelected ? "text-arcade" : !given && !isSelected ? "text-(--cat-ink)" : ""
                   } ${wrong ? "underline decoration-2 underline-offset-2" : ""}`}
                 >
                   {value || ""}

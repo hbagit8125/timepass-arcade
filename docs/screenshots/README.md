@@ -38,3 +38,15 @@ Several screenshots side by side, used for quick review.
 | `snake-paused.png` | The pause overlay |
 | `m-<game>.png` | Each new game on a phone, before the first input |
 | `m-flap-play.png` | Flap on a phone after a few taps |
+
+## phase-4
+
+| File | Shows |
+|---|---|
+| `home.png` | Home page with a drawing of each game on its card |
+| `card-preview-hover.png` | A card's drawing animating while hovered |
+| `home-light.png`, `word-guess-light.png` | Light theme with the darker, more readable category text |
+| `offline-falling-blocks.png` | Falling Blocks loaded and playing with the network switched off |
+| `m-home-install-button.png` | Phone header with the install button (icon only on phones) |
+| `m-game-grid.png` | Game grid on a phone |
+| `app-icon-64.png`, `app-icon-512.png` | The browser tab icon and the installed-app icon |
