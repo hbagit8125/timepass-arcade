@@ -13,7 +13,7 @@ import { Confetti } from "./Confetti";
 type EndState = GameResult & { newBest: boolean };
 
 const control =
-  "glass inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium transition-colors hover:bg-surface-strong";
+  "glass inline-flex h-11 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-colors hover:bg-surface-strong sm:gap-2 sm:px-4";
 
 export function GameShell({ slug }: { slug: string }) {
   const game = getGame(slug)!;
@@ -43,6 +43,21 @@ export function GameShell({ slug }: { slug: string }) {
     document.addEventListener("fullscreenchange", onChange);
     return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
+
+  // Real-time games pause themselves when the tab is hidden, and with the P key.
+  useEffect(() => {
+    if (!game.pausable) return;
+    const onHide = () => document.hidden && setPaused(true);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "p" && !e.metaKey && !e.ctrlKey && !e.altKey) setPaused((p) => !p);
+    };
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("visibilitychange", onHide);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [game.pausable]);
 
   const handleScore = useCallback(
     (value: number) => {
@@ -127,7 +142,8 @@ export function GameShell({ slug }: { slug: string }) {
         )}
         <button type="button" onClick={() => setShowHelp((h) => !h)} aria-expanded={showHelp} className={control}>
           <CircleHelp className="size-4" aria-hidden />
-          How to play
+          <span className="sm:hidden">Help</span>
+          <span className="hidden sm:inline">How to play</span>
         </button>
         <button type="button" onClick={toggleFullscreen} className={`${control} ml-auto`} aria-label={fullscreen ? "Exit full screen" : "Full screen"}>
           {fullscreen ? <Minimize className="size-4" aria-hidden /> : <Maximize className="size-4" aria-hidden />}

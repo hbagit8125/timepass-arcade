@@ -26,7 +26,7 @@ games/
   types.ts                the contract every game implements
   2048/                   one folder per game
 components/               header, hero, cards, game shell, confetti
-lib/                      saved-score store, sound effects
+lib/                      saved-score store, sound effects, canvas and game-loop helpers
 ```
 
 ## Add a game
@@ -39,6 +39,4 @@ The shell handles score, best score, restart, pause, full screen and the end scr
 
 ## Status
 
-Playable (10): 2048, Sudoku, Minesweeper, Memory Match, Word Guess, Sliding Puzzle, Tic-Tac-Toe, Connect Four, Hangman, Rock Paper Scissors.
-
-Coming soon (10): the arcade and reflex games.
+All 20 games are playable.

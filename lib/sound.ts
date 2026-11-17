@@ -32,4 +32,7 @@ export const sfx = {
   win: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.22, "triangle", 0.12, i * 0.09)),
   lose: () => [330, 262, 196].forEach((f, i) => tone(f, 0.25, "sawtooth", 0.06, i * 0.12)),
   click: () => tone(520, 0.04, "square", 0.04),
+  /** A plain note, for games that play their own tunes. */
+  note: (freq: number, duration = 0.18) => tone(freq, duration, "triangle", 0.13),
+  bounce: () => tone(420, 0.05, "square", 0.05),
 };

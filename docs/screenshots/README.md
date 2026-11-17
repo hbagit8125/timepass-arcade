@@ -28,3 +28,13 @@ Some shots were taken part-way through a phase, so spacing in the game header ma
 ## contact-sheets
 
 Several screenshots side by side, used for quick review.
+
+## phase-3
+
+| File | Shows |
+|---|---|
+| `home3.png` | Home page at 1366 × 768 with all 20 games playable |
+| `snake.png`, `brick.png`, `blocks.png`, `flap.png`, `paddle.png`, `dash.png`, `whack.png`, `echo.png`, `reaction.png`, `typing.png` | Each arcade and reflex game mid-play, desktop |
+| `snake-paused.png` | The pause overlay |
+| `m-<game>.png` | Each new game on a phone, before the first input |
+| `m-flap-play.png` | Flap on a phone after a few taps |

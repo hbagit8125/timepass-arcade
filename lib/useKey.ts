@@ -27,3 +27,23 @@ export function useKey(handler: (key: string, e: KeyboardEvent) => boolean | voi
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 }
+
+/** The set of keys currently held down, for games that move while a key is pressed. */
+export function useHeldKeys() {
+  const held = useRef(new Set<string>());
+  useEffect(() => {
+    const keys = held.current;
+    const down = (e: KeyboardEvent) => keys.add(e.key);
+    const up = (e: KeyboardEvent) => keys.delete(e.key);
+    const clear = () => keys.clear();
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    window.addEventListener("blur", clear);
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+      window.removeEventListener("blur", clear);
+    };
+  }, []);
+  return held;
+}

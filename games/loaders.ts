@@ -17,3 +17,16 @@ export const GAME_COMPONENTS: Record<string, ComponentType<GameProps>> = {
   hangman: dynamic(() => import("./hangman/Hangman"), { ssr: false }),
   "rock-paper-scissors": dynamic(() => import("./rock-paper-scissors/RockPaperScissors"), { ssr: false }),
 };
+
+Object.assign(GAME_COMPONENTS, {
+  snake: dynamic(() => import("./snake/Snake"), { ssr: false }),
+  "brick-breaker": dynamic(() => import("./brick-breaker/BrickBreaker"), { ssr: false }),
+  "falling-blocks": dynamic(() => import("./falling-blocks/FallingBlocks"), { ssr: false }),
+  flap: dynamic(() => import("./flap/Flap"), { ssr: false }),
+  "paddle-duel": dynamic(() => import("./paddle-duel/PaddleDuel"), { ssr: false }),
+  dash: dynamic(() => import("./dash/Dash"), { ssr: false }),
+  "whack-a-mole": dynamic(() => import("./whack-a-mole/WhackAMole"), { ssr: false }),
+  echo: dynamic(() => import("./echo/Echo"), { ssr: false }),
+  "reaction-time": dynamic(() => import("./reaction-time/ReactionTime"), { ssr: false }),
+  "typing-speed": dynamic(() => import("./typing-speed/TypingSpeed"), { ssr: false }),
+});
