@@ -91,11 +91,11 @@ export default function ReactionTime({ paused, onScore, onEnd }: GameProps) {
         </span>
       </button>
 
-      <ol className="mt-4 flex gap-2" aria-label="Round times">
+      <ol className="mt-4 flex w-full max-w-sm gap-2" aria-label="Round times">
         {Array.from({ length: ROUNDS }, (_, i) => (
           <li
             key={i}
-            className={`grid h-11 w-16 place-items-center rounded-xl text-sm font-semibold tabular-nums ${
+            className={`grid h-11 flex-1 place-items-center rounded-xl text-sm font-semibold tabular-nums ${
               times[i] !== undefined ? "bg-(--cat) text-on-accent" : "glass text-muted"
             }`}
           >

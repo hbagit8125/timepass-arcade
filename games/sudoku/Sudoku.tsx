@@ -10,7 +10,7 @@ import { makePuzzle } from "./logic";
 
 const box = (cell: number) => Math.floor(cell / 27) * 3 + Math.floor((cell % 9) / 3);
 
-export default function Sudoku({ paused, onEnd }: GameProps) {
+export default function Sudoku({ paused, onScore, onEnd }: GameProps) {
   const [{ puzzle, solution }] = useState(makePuzzle);
   const [values, setValues] = useState(puzzle);
   const [selected, setSelected] = useState<number | null>(null);
@@ -33,8 +33,10 @@ export default function Sudoku({ paused, onEnd }: GameProps) {
     }
     sfx.move();
     if (next.every((v, i) => v === solution[i])) {
+      const score = Math.max(100, 2000 - seconds * 2 - mistakes * 100);
+      onScore(score);
       onEnd({
-        score: Math.max(100, 2000 - seconds * 2 - mistakes * 100),
+        score,
         won: true,
         message: `Solved in ${clock(seconds)} with ${mistakes} ${mistakes === 1 ? "mistake" : "mistakes"}.`,
       });

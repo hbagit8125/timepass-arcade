@@ -2,6 +2,19 @@
 
 import { useEffect, useRef } from "react";
 
+// The button most recently pressed with a mouse or finger. It keeps focus after
+// the click, but Space and Enter should then go to the game, not press it again.
+let clickedButton: Element | null = null;
+if (typeof window !== "undefined") {
+  window.addEventListener(
+    "pointerdown",
+    (e) => (clickedButton = (e.target as Element | null)?.closest("button, a") ?? null),
+    true,
+  );
+  // Moving focus with Tab hands Space and Enter back to the focused button.
+  window.addEventListener("keydown", (e) => e.key === "Tab" && (clickedButton = null), true);
+}
+
 /**
  * Calls `handler` for every key press on the page. Return true from the
  * handler to stop the browser's default action (such as scrolling).
@@ -18,8 +31,14 @@ export function useKey(handler: (key: string, e: KeyboardEvent) => boolean | voi
       const target = e.target as HTMLElement | null;
       if (target) {
         if (/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
-        // Let Enter and Space press the focused button instead of the game.
-        if (/^(BUTTON|A)$/.test(target.tagName) && (e.key === "Enter" || e.key === " ")) return;
+        // A button reached with Tab keeps Enter and Space, so keyboard users can press it.
+        // A button that was clicked or tapped doesn't: those keys go to the game instead.
+        if (
+          /^(BUTTON|A)$/.test(target.tagName) &&
+          (e.key === "Enter" || e.key === " ") &&
+          target !== clickedButton
+        )
+          return;
       }
       if (latest.current(e.key, e) === true) e.preventDefault();
     };

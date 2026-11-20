@@ -10,10 +10,10 @@ import { TYPING_WORDS } from "./words";
 const DURATION = 60;
 const VISIBLE = 12;
 
-const makeWords = () => Array.from({ length: 260 }, () => pick(TYPING_WORDS));
+const makeWords = (count = 200) => Array.from({ length: count }, () => pick(TYPING_WORDS));
 
 export default function TypingSpeed({ paused, onScore, onEnd }: GameProps) {
-  const [words] = useState(makeWords);
+  const [words, setWords] = useState(() => makeWords());
   const [index, setIndex] = useState(0);
   const [typed, setTyped] = useState("");
   const [started, setStarted] = useState(false);
@@ -32,7 +32,7 @@ export default function TypingSpeed({ paused, onScore, onEnd }: GameProps) {
     if (!done || reported.current) return;
     reported.current = true;
     const accuracy = total ? Math.round((correct / total) * 100) : 0;
-    onEnd({ score: wpm, won: true, message: `${wpm} words per minute at ${accuracy}% accuracy.` });
+    onEnd({ score: wpm, won: wpm > 0, message: `${wpm} words per minute at ${accuracy}% accuracy.` });
   }, [done, wpm, correct, total, onEnd]);
 
   function change(value: string) {
@@ -47,6 +47,8 @@ export default function TypingSpeed({ paused, onScore, onEnd }: GameProps) {
     setCorrect(correct + gained);
     setTotal(total + attempt.length + 1);
     setIndex(index + 1);
+    // Top up the list well before it runs out.
+    if (index + VISIBLE * 2 >= words.length) setWords([...words, ...makeWords()]);
     setTyped("");
     if (right) {
       sfx.click();

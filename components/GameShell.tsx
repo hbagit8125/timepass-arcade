@@ -31,15 +31,44 @@ export function GameShell({ slug }: { slug: string }) {
   const [showHelp, setShowHelp] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
+  const shell = useRef<HTMLDivElement>(null);
+  const [endReady, setEndReady] = useState(false);
+  const playAgain = useRef<HTMLButtonElement>(null);
   // Best score when this round began, to tell whether the round set a new one.
   const bestAtStart = useRef<number | null>(null);
 
+  // Count a game as played on the first key press or tap, not just for opening it.
+  const played = useRef(false);
+  const markPlayed = useCallback((e?: Event) => {
+    // Moving around the page with Tab, Escape or modifier keys isn't playing.
+    if (e instanceof KeyboardEvent && (/^(Tab|Escape|Shift|Control|Alt|Meta)$/.test(e.key) || e.metaKey || e.ctrlKey)) return;
+    if (played.current || !useArcade.getState().ready) return;
+    played.current = true;
+    useArcade.getState().markPlayed(slug);
+  }, [slug]);
   useEffect(() => {
-    if (ready) useArcade.getState().markPlayed(slug);
-  }, [ready, slug]);
+    if (!ready) return;
+    window.addEventListener("keydown", markPlayed);
+    return () => window.removeEventListener("keydown", markPlayed);
+  }, [ready, markPlayed]);
+
+  // The end screen ignores presses for a moment, so a key held from the game can't skip it.
+  useEffect(() => {
+    if (!end) return;
+    const t = window.setTimeout(() => setEndReady(true), 700);
+    return () => {
+      window.clearTimeout(t);
+      setEndReady(false);
+    };
+  }, [end]);
+
+  // Focus Play again once it is enabled; a disabled button can't take focus.
+  useEffect(() => {
+    if (endReady) playAgain.current?.focus();
+  }, [endReady]);
 
   useEffect(() => {
-    const onChange = () => setFullscreen(document.fullscreenElement === stage.current);
+    const onChange = () => setFullscreen(document.fullscreenElement === shell.current);
     document.addEventListener("fullscreenchange", onChange);
     return () => document.removeEventListener("fullscreenchange", onChange);
   }, []);
@@ -49,7 +78,9 @@ export function GameShell({ slug }: { slug: string }) {
     if (!game.pausable) return;
     const onHide = () => document.hidden && setPaused(true);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "p" && !e.metaKey && !e.ctrlKey && !e.altKey) setPaused((p) => !p);
+      if (e.key.toLowerCase() !== "p" || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (/^(INPUT|TEXTAREA)$/.test((e.target as HTMLElement | null)?.tagName ?? "")) return;
+      setPaused((p) => !p);
     };
     document.addEventListener("visibilitychange", onHide);
     window.addEventListener("keydown", onKey);
@@ -92,11 +123,15 @@ export function GameShell({ slug }: { slug: string }) {
 
   function toggleFullscreen() {
     if (document.fullscreenElement) void document.exitFullscreen();
-    else void stage.current?.requestFullscreen?.().catch(() => {});
+    else void shell.current?.requestFullscreen?.().catch(() => {});
   }
 
   return (
-    <div data-cat={game.category} className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 pb-6 sm:px-8">
+    <div
+      ref={shell}
+      data-cat={game.category}
+      className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 pb-6 sm:px-8 [&:fullscreen]:max-w-none [&:fullscreen]:overflow-y-auto [&:fullscreen]:bg-bg [&:fullscreen]:pt-4"
+    >
       <div className="flex items-center justify-between gap-3">
         <Link href="/" className="inline-flex h-11 items-center gap-2 rounded-full pr-3 text-sm font-medium text-muted hover:text-ink">
           <ArrowLeft className="size-4" aria-hidden />
@@ -105,7 +140,6 @@ export function GameShell({ slug }: { slug: string }) {
         <button
           type="button"
           onClick={() => toggleFavourite(slug)}
-          aria-pressed={isFavourite}
           aria-label={isFavourite ? "Remove from favourites" : "Add to favourites"}
           className="grid size-11 place-items-center rounded-full text-muted transition-colors hover:bg-surface-strong hover:text-arcade"
         >
@@ -165,7 +199,8 @@ export function GameShell({ slug }: { slug: string }) {
 
       <div
         ref={stage}
-        className="relative mt-4 flex min-h-[min(34rem,calc(100dvh-13rem))] flex-1 flex-col items-center justify-start [&:fullscreen]:justify-center [&:fullscreen]:bg-bg [&:fullscreen]:p-6"
+        onPointerDownCapture={() => markPlayed()}
+        className="relative mt-4 flex min-h-[min(34rem,calc(100dvh-13rem))] flex-1 flex-col items-center justify-start"
       >
         <Game key={run} paused={paused || end !== null} onScore={handleScore} onEnd={handleEnd} />
 
@@ -195,7 +230,8 @@ export function GameShell({ slug }: { slug: string }) {
               <button
                 type="button"
                 onClick={restart}
-                autoFocus
+                ref={playAgain}
+                disabled={!endReady}
                 className="mt-7 inline-flex h-13 items-center gap-2 rounded-full bg-linear-to-r from-puzzle to-arcade px-8 font-semibold text-on-accent transition-transform hover:scale-[1.03] active:scale-[0.97]"
               >
                 <RotateCcw className="size-4" aria-hidden />

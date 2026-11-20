@@ -9,6 +9,7 @@ function toggleTheme() {
   const root = document.documentElement;
   const next = root.dataset.theme === "light" ? "dark" : "light";
   root.dataset.theme = next;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#f4f1ff" : "#100e24");
   try {
     localStorage.setItem("timepass-theme", next);
   } catch {}
@@ -81,7 +82,6 @@ export function Header() {
           onClick={toggleMuted}
           className={iconButton}
           aria-label={muted ? "Turn sound on" : "Turn sound off"}
-          aria-pressed={muted}
         >
           {muted ? <VolumeX className="size-[18px]" /> : <Volume2 className="size-[18px]" />}
         </button>

@@ -77,7 +77,6 @@ export function GameCard({ game }: { game: GameMeta }) {
       <button
         type="button"
         onClick={() => toggleFavourite(game.slug)}
-        aria-pressed={isFavourite}
         aria-label={isFavourite ? `Remove ${game.name} from favourites` : `Add ${game.name} to favourites`}
         className="absolute right-6 top-6 z-10 grid size-10 place-items-center rounded-full text-muted transition-colors hover:bg-surface-strong hover:text-arcade"
       >

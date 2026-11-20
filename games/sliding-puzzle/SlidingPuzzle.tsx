@@ -36,7 +36,7 @@ function scramble(): number[] {
   return board.every((t, i) => t === i) ? scramble() : board;
 }
 
-export default function SlidingPuzzle({ paused, onEnd }: GameProps) {
+export default function SlidingPuzzle({ paused, onScore, onEnd }: GameProps) {
   const [board, setBoard] = useState(scramble);
   const [moves, setMoves] = useState(0);
   const solved = board.every((t, i) => t === i);
@@ -51,8 +51,10 @@ export default function SlidingPuzzle({ paused, onEnd }: GameProps) {
     setMoves(moves + 1);
     sfx.move();
     if (next.every((t, i) => t === i)) {
+      const score = Math.max(50, 1000 - (moves + 1) * 6);
+      onScore(score);
       onEnd({
-        score: Math.max(50, 1000 - (moves + 1) * 6),
+        score,
         won: true,
         message: `Solved in ${moves + 1} moves.`,
       });

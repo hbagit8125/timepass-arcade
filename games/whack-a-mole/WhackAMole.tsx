@@ -49,7 +49,7 @@ export default function WhackAMole({ paused, onScore, onEnd }: GameProps) {
       g.over = true;
       g.holes.fill(null);
       show();
-      onEnd({ score: g.score, won: true, message: `You hit ${g.hits} ${g.hits === 1 ? "mole" : "moles"} in ${DURATION} seconds.` });
+      onEnd({ score: g.score, won: g.score > 0, message: `You hit ${g.hits} ${g.hits === 1 ? "mole" : "moles"} in ${DURATION} seconds.` });
       return;
     }
 

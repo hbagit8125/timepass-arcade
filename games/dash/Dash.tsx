@@ -78,6 +78,7 @@ export default function Dash({ paused, onScore, onEnd }: GameProps) {
       );
       if (hit) {
         g.dead = true;
+        onScore(score);
         onEnd({ score, message: `You ran ${score} metres.` });
       }
     }

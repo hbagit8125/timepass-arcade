@@ -61,6 +61,7 @@ export default function Minesweeper({ paused, onScore, onEnd }: GameProps) {
   const seconds = useElapsed(status === "playing" && !paused);
   const longPress = useRef<number | undefined>(undefined);
   const suppressClick = useRef(false);
+  const lastLongPress = useRef(-Infinity);
   const endTimer = useRef<number | undefined>(undefined);
 
   useEffect(
@@ -135,11 +136,16 @@ export default function Minesweeper({ paused, onScore, onEnd }: GameProps) {
             key={i}
             type="button"
             onClick={() => press(i)}
-            onContextMenu={() => toggleFlag(i)}
+            onContextMenu={() => {
+              // Android also fires this after a long press, which already placed the flag.
+              if (performance.now() - lastLongPress.current < 800) return;
+              toggleFlag(i);
+            }}
             onPointerDown={(e) => {
               if (e.pointerType === "mouse") return;
               longPress.current = window.setTimeout(() => {
                 suppressClick.current = true;
+                lastLongPress.current = performance.now();
                 toggleFlag(i);
               }, 420);
             }}

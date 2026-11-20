@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 };
 
 // Runs before first paint so a saved light theme never flashes dark.
-const themeScript = `try{var t=localStorage.getItem("timepass-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){}`;
+const themeScript = `try{var t=localStorage.getItem("timepass-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark";if(t==="light")addEventListener("DOMContentLoaded",function(){var m=document.querySelector('meta[name="theme-color"]');m&&m.setAttribute("content","#f4f1ff")})}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

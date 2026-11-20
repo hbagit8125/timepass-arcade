@@ -70,7 +70,10 @@ export default function Echo({ paused, onScore, onEnd }: GameProps) {
 
   useKey((key) => {
     if (/^[1-4]$/.test(key)) return press(Number(key) - 1), true;
-    if ((key === " " || key === "Enter") && phase === "idle") return press(0), true;
+    if (key === " " || key === "Enter") {
+      if (phase === "idle") press(0);
+      return true;
+    }
   });
 
   const status = {
